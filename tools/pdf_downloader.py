@@ -340,12 +340,13 @@ class URLExtractor:
         """从URL推断文件名"""
         parsed = urlparse(url)
         path = unquote(parsed.path)
+        hostname = parsed.hostname or ""
 
         # 从路径中提取文件名
         filename = os.path.basename(path)
 
         # 特殊处理：arxiv PDF链接
-        if "arxiv.org" in parsed.netloc and "/pdf/" in path:
+        if (hostname == "arxiv.org" or hostname.endswith(".arxiv.org")) and "/pdf/" in path:
             if filename:
                 # 检查是否已经有合适的文件扩展名
                 if not filename.lower().endswith((".pdf", ".doc", ".docx", ".txt")):
